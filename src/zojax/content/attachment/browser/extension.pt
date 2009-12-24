@@ -1,0 +1,6 @@
+<tal:block tal:content="structure provider:content.container.contents" />
+
+<br /><br />
+<div class="z-form-fieldset"
+     tal:content="structure pagelet:content.adding">
+</div>

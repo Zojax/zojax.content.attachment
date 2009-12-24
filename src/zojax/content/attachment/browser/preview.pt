@@ -1,0 +1,28 @@
+<tal:block i18n:domain="zojax.content.attachment">
+  <h1 i18n:translate="">Previews</h1>
+
+  <div class="z-form-fieldset" tal:define="preview python:context.preview">
+    <tal:block condition="not:preview">
+      <br />
+      <tal:i18n i18n:translate="">There are no previews.</tal:i18n>
+      <br /><br />
+    </tal:block>
+    <tal:block condition="preview">
+      <div class="z-form-fieldset">
+	<div tal:define="url context/@@absolute_url" tal:repeat="name preview/keys">
+	  <input type="checkbox" name="preview:list"
+		 tal:attributes="value name" />
+	  <a tal:content="name" 
+	     tal:attributes="href string:$url/preview/$name/"></a>
+	</div>
+      </div>
+      <div class="z-form-controls">
+	<hr />
+	<input type="submit" class="z-form-removebutton"
+	       name="form.remove" value="Remove" i18n:attributes="value" />
+      </div>
+    </tal:block>
+  </div>
+  
+   <tal:block tal:content="structure view/@@pagelet/form.view" />
+</tal:block>

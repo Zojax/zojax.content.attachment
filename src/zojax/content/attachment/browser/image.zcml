@@ -1,0 +1,51 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   i18n_domain="zojax.content.attachment">
+
+  <zojax:pagelet
+     name="index.html"
+     for="zojax.content.ext_content_image"
+     class=".attach.AddAttachmentForm"
+     permission="zope.View" />
+
+  <browser:page
+     name="view.html"
+     for="..interfaces.IImage"
+     attribute="show"
+     class=".attach.ImageView"
+     permission="zope.Public" />
+
+  <browser:icon
+     name="zmi_icon"
+     for="..interfaces.IImage"
+     file="image_icon.gif" />
+
+  <browser:icon
+     name="zmi_icon"
+     for="zojax.content.ext_content_image"
+     file="image_icon.gif" /> 
+
+  <!-- Previews -->
+  <zojax:pagelet
+     name="previews"
+     title="Previews"
+     type="wizard.step"
+     for="..interfaces.IImage
+	  zojax.content.forms.interfaces.IEditContentWizard"
+     template="preview.pt"
+     class=".preview.Previews"
+     weight="150" />
+
+  <adapter
+     for="..interfaces.IPreviewFolder *"
+     factory="z3c.traverser.traverser.PluggableTraverser"
+     provides="zope.publisher.interfaces.IPublishTraverse" />
+
+  <subscriber
+     for="..interfaces.IPreviewFolder *"
+     provides="z3c.traverser.interfaces.ITraverserPlugin"
+     factory=".publisher.PreviewPublisherPlugin" />
+
+</configure>

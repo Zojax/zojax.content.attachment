@@ -1,0 +1,144 @@
+# #############################################################################
+#
+# Copyright (c) 2009 Zope Foundation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+# #############################################################################
+msgid ""
+msgstr ""
+"Project-Id-Version: Development/Unknown\n"
+"POT-Creation-Date: Mon Nov 17 00:09:38 2008\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Zope 3 Developers <zope3-dev@zope.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/locales/extract.py\n"
+
+#: src/zojax/content/attachment/browser/attach.pt:3
+msgid "Attachment link"
+msgstr ""
+
+#: src/zojax/content/attachment/browser/image.zcml:31
+#: src/zojax/content/attachment/browser/preview.pt:2
+msgid "Previews"
+msgstr ""
+
+#: src/zojax/content/attachment/browser/link.pt:3
+msgid "The link address is:"
+msgstr ""
+
+#: src/zojax/content/attachment/browser/preview.pt:20
+msgid "Remove"
+msgstr "Удалить"
+
+#: src/zojax/content/attachment/browser/preview.pt:6
+msgid "There are no previews."
+msgstr ""
+
+#: src/zojax/content/attachment/browser/preview.py:28
+msgid "Width"
+msgstr "Ширина"
+
+#: src/zojax/content/attachment/browser/preview.py:33
+msgid "Height"
+msgstr "Высота"
+
+#: src/zojax/content/attachment/browser/preview.py:42
+msgid "Generate preview"
+msgstr ""
+
+#: src/zojax/content/attachment/browser/preview.py:44
+msgid "Generate"
+msgstr "Сгенерировать"
+
+#: src/zojax/content/attachment/browser/preview.py:53
+msgid "Preview has been generated."
+msgstr ""
+
+#: src/zojax/content/attachment/browser/preview.py:68
+msgid "Previews have been removed."
+msgstr ""
+
+#: src/zojax/content/attachment/configure.zcml:10
+msgid "Content attachments extension."
+msgstr ""
+
+#: src/zojax/content/attachment/configure.zcml:10
+msgid "Attachments"
+msgstr ""
+
+#: src/zojax/content/attachment/configure.zcml:29
+msgid "Attachments Container"
+msgstr ""
+
+#: src/zojax/content/attachment/configure.zcml:50
+msgid "File attachment."
+msgstr ""
+
+#: src/zojax/content/attachment/configure.zcml:50
+msgid "File"
+msgstr "Файл"
+
+#: src/zojax/content/attachment/configure.zcml:72
+msgid "Link"
+msgstr "Ссылка"
+
+#: src/zojax/content/attachment/configure.zcml:72
+msgid "Link attachment."
+msgstr ""
+
+#: src/zojax/content/attachment/configure.zcml:92
+msgid "Image attachment with previews."
+msgstr ""
+
+#: src/zojax/content/attachment/configure.zcml:92
+msgid "Image"
+msgstr "Изображение"
+
+#: src/zojax/content/attachment/interfaces.py:34
+#: src/zojax/content/attachment/interfaces.py:85
+msgid "Title"
+msgstr "Заголовок"
+
+#: src/zojax/content/attachment/interfaces.py:35
+msgid "Attachment title."
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:41
+#: src/zojax/content/attachment/interfaces.py:91
+msgid "Description"
+msgstr "Описание"
+
+#: src/zojax/content/attachment/interfaces.py:42
+msgid "Attachment description."
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:52
+#: src/zojax/content/attachment/interfaces.py:64
+msgid "Attachment"
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:86
+msgid "Link title."
+msgstr "Заголовог ссылки"
+
+#: src/zojax/content/attachment/interfaces.py:92
+msgid "Link description."
+msgstr "Описание ссылки."
+
+#: src/zojax/content/attachment/interfaces.py:97
+msgid "URL"
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:98
+msgid "Link URL."
+msgstr ""

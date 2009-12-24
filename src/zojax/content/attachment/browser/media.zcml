@@ -1,0 +1,66 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   i18n_domain="zojax.content.attachment">
+
+  <zojax:pagelet
+     name="index.html"
+     for="zojax.content.ext_content_media"
+     class=".attach.AddAttachmentForm"
+     permission="zope.View" />
+
+  <browser:page
+     name="view.html"
+     for="..interfaces.IMedia"
+     attribute="show"
+     class=".attach.MediaView"
+     permission="zope.Public" />
+
+  <browser:icon
+     name="zmi_icon"
+     for="..interfaces.IMedia"
+     file="media_icon.gif" />
+
+  <browser:icon
+     name="zmi_icon"
+     for="zojax.content.ext_content_media"
+     file="media_icon.gif" />
+
+    <!-- Previews -->
+  <zojax:pagelet
+     name="previews"
+     title="Previews"
+     type="wizard.step"
+     for="..interfaces.IMedia
+	  zojax.content.forms.interfaces.IEditContentWizard"
+     template="preview.pt"
+     class=".preview.Previews"
+     weight="150" />
+
+  <!-- media manager js api -->
+  <browser:page
+     name="mediaManagerAPI"
+     for="..interfaces.IAttachmentsExtension"
+     class=".jsapi.MediaManagerAPI"
+     permission="zope.Public" />
+
+  <browser:page
+     name="listing"
+     for=".jsapi.IMediaManagerAPI"
+     class=".jsapi.Medias"
+     permission="zope.View" />
+
+  <browser:page
+     name="upload"
+     for=".jsapi.IMediaManagerAPI"
+     class=".jsapi.MediaFileUpload"
+     permission="zojax.AddContentAttachment" />
+
+  <browser:page
+     name="remove"
+     for=".jsapi.IMediaManagerAPI"
+     class=".jsapi.MediaFileRemove"
+     permission="zojax.AddContentAttachment" />
+
+</configure>

@@ -1,0 +1,7 @@
+<div class="z-form-fieldset" i18n:domain="zojax.content.attachment">
+  <br />
+  <span i18n:translate="">The link address is:</span>
+  <a href="#" tal:attributes="href context/url"
+     tal:content="context/url">remote url</a>
+  <br /><br />
+</div>

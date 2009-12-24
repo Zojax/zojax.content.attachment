@@ -1,0 +1,145 @@
+# #############################################################################
+#
+# Copyright (c) 2009 Zope Foundation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+# #############################################################################
+msgid ""
+msgstr ""
+"Project-Id-Version: Development/Unknown\n"
+"POT-Creation-Date: Mon Nov 17 00:09:38 2008\n"
+"PO-Revision-Date: 2008-11-17 20:42+0100\n"
+"Last-Translator: F. Kooman <fkooman@tuxed.net>\n"
+"Language-Team: Zope 3 Developers <zope3-dev@zope.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/locales/extract.py\n"
+
+#: src/zojax/content/attachment/browser/attach.pt:3
+msgid "Attachment link"
+msgstr "Bijlage link"
+
+#: src/zojax/content/attachment/browser/image.zcml:31
+#: src/zojax/content/attachment/browser/preview.pt:2
+msgid "Previews"
+msgstr "Voorbeelden"
+
+#: src/zojax/content/attachment/browser/link.pt:3
+msgid "The link address is:"
+msgstr "Het adres is:"
+
+#: src/zojax/content/attachment/browser/preview.pt:20
+msgid "Remove"
+msgstr "Verwijderen"
+
+#: src/zojax/content/attachment/browser/preview.pt:6
+msgid "There are no previews."
+msgstr "Er zijn geen voorbeelden."
+
+#: src/zojax/content/attachment/browser/preview.py:28
+msgid "Width"
+msgstr "Breedte"
+
+#: src/zojax/content/attachment/browser/preview.py:33
+msgid "Height"
+msgstr "Hoogte"
+
+#: src/zojax/content/attachment/browser/preview.py:42
+msgid "Generate preview"
+msgstr "Voorbeeld genereren"
+
+#: src/zojax/content/attachment/browser/preview.py:44
+msgid "Generate"
+msgstr "Genereer"
+
+#: src/zojax/content/attachment/browser/preview.py:53
+msgid "Preview has been generated."
+msgstr "Voorbeeld is gegenereerd."
+
+#: src/zojax/content/attachment/browser/preview.py:68
+msgid "Previews have been removed."
+msgstr "Voorbeelden zijn verwijderd."
+
+#: src/zojax/content/attachment/configure.zcml:10
+msgid "Content attachments extension."
+msgstr "Inhoudsbijlagen module."
+
+#: src/zojax/content/attachment/configure.zcml:10
+msgid "Attachments"
+msgstr "Bijlagen"
+
+#: src/zojax/content/attachment/configure.zcml:29
+msgid "Attachments Container"
+msgstr "Bijlagen container"
+
+#: src/zojax/content/attachment/configure.zcml:50
+msgid "File attachment."
+msgstr "Bestandsbijlage."
+
+#: src/zojax/content/attachment/configure.zcml:50
+msgid "File"
+msgstr "Bestand"
+
+#: src/zojax/content/attachment/configure.zcml:72
+msgid "Link"
+msgstr "Link"
+
+#: src/zojax/content/attachment/configure.zcml:72
+msgid "Link attachment."
+msgstr "Link bijlage."
+
+#: src/zojax/content/attachment/configure.zcml:92
+msgid "Image attachment with previews."
+msgstr "Afbeeldingsbijlage met voorbeelden."
+
+#: src/zojax/content/attachment/configure.zcml:92
+msgid "Image"
+msgstr "Afbeelding"
+
+#: src/zojax/content/attachment/interfaces.py:34
+#: src/zojax/content/attachment/interfaces.py:85
+msgid "Title"
+msgstr "Titel"
+
+#: src/zojax/content/attachment/interfaces.py:35
+msgid "Attachment title."
+msgstr "Bijlage titel"
+
+#: src/zojax/content/attachment/interfaces.py:41
+#: src/zojax/content/attachment/interfaces.py:91
+msgid "Description"
+msgstr "Omschrijving"
+
+#: src/zojax/content/attachment/interfaces.py:42
+msgid "Attachment description."
+msgstr "Bijlageomschrijving"
+
+#: src/zojax/content/attachment/interfaces.py:52
+#: src/zojax/content/attachment/interfaces.py:64
+msgid "Attachment"
+msgstr "Bijlage"
+
+#: src/zojax/content/attachment/interfaces.py:86
+msgid "Link title."
+msgstr "Link titel."
+
+#: src/zojax/content/attachment/interfaces.py:92
+msgid "Link description."
+msgstr "Linkomschrijving."
+
+#: src/zojax/content/attachment/interfaces.py:97
+msgid "URL"
+msgstr "URL"
+
+#: src/zojax/content/attachment/interfaces.py:98
+msgid "Link URL."
+msgstr "Link URL."
+

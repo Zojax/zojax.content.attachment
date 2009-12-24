@@ -1,0 +1,8 @@
+<html>
+  <body>
+    <div tal:define="msg provider:statusMessage"
+       tal:condition="msg" tal:content="structure msg"></div>
+    <tal:block tal:content="structure view/render" />
+  </body>
+</html>
+

@@ -1,0 +1,192 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   i18n_domain="zojax.content.attachment">
+
+  <include file="media.zcml" />
+  <include file="image.zcml" />
+  <include file="editwizard.zcml" />
+
+  <!-- attachment extensions -->
+  <browser:defaultView
+     name="contents.html"
+     for="..interfaces.IAttachmentsExtension" />
+
+  <zojax:pagelet
+     name="contents.html"
+     for="..interfaces.IAttachmentsExtension"
+     template="extension.pt"
+     permission="zojax.ModifyContent" />
+
+  <adapter
+     for="..interfaces.IAttachmentsExtension *"
+     factory="zojax.extensions.browser.breadcrumb.ExtensionBreadcrumb" />
+
+  <adapter factory=".extension.TableConfiguration" />
+
+  <!-- Attachment publisher -->
+  <adapter
+     for="..interfaces.IAttachment *"
+     factory="z3c.traverser.traverser.PluggableTraverser"
+     provides="zope.publisher.interfaces.IPublishTraverse" />
+
+  <subscriber
+     for="..interfaces.IAttachment *"
+     provides="z3c.traverser.interfaces.ITraverserPlugin"
+     factory=".publisher.AttachmentPublisherPlugin" />
+
+  <adapter factory=".attach.AttachmentViewView" />
+
+  <view
+     for="..interfaces.IAttachment"
+     factory=".attach.AttachmentAbsoluteURL"
+     type="zope.publisher.interfaces.http.IHTTPRequest"
+     permission="zope.Public"
+     provides="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <view
+     for="..interfaces.IAttachment"
+     name="absolute_url"
+     factory=".attach.AttachmentAbsoluteURL"
+     type="zope.publisher.interfaces.http.IHTTPRequest"
+     permission="zope.Public"
+     allowed_interface="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <browser:page
+     for="..interfaces.IAttachment"
+     name="absolute_url"
+     class=".attach.AttachmentAbsoluteURL"
+     permission="zope.Public"
+     allowed_interface="zope.traversing.browser.interfaces.IAbsoluteURL" />
+
+  <!-- attachment -->
+  <browser:defaultView
+     name="view.html"
+     for="..interfaces.IFileAttachment" />
+
+  <zojax:pagelet
+     name="view"
+     title="View"
+     type="wizard.step"
+     for="..interfaces.IFileAttachment
+	  zojax.content.forms.interfaces.IEditContentWizard"
+     template="attach.pt"
+     class=".attach.AttachView"
+     permission="zope.View"
+     weight="10" />
+
+  <!-- File -->
+  <browser:page
+     name="view.html"
+     for="..interfaces.IFile"
+     attribute="show"
+     class=".attach.FileView"
+     permission="zope.Public" />
+
+  <zojax:pagelet
+     name="index.html"
+     for="zojax.content.ext_content_file"
+     class=".attach.AddAttachmentForm"
+     permission="zope.View" />
+
+  <browser:icon
+     name="zmi_icon"
+     for="..interfaces.IFile"
+     file="file_icon.gif" />
+
+  <browser:icon
+     name="zmi_icon"
+     for="zojax.content.ext_content_file"
+     file="file_icon.gif" />
+
+  <!-- link -->
+  <browser:defaultView
+     name="view.html" for="..interfaces.ILink" />
+
+  <browser:page
+     name="view.html"
+     for="..interfaces.ILink"
+     class=".attach.LinkView"
+     permission="zope.Public" />
+
+  <zojax:pagelet
+     name="view"
+     title="View"
+     type="wizard.step"
+     for="..interfaces.ILink
+	  zojax.content.forms.interfaces.IEditContentWizard"
+     template="link.pt"
+     class=".attach.WizardStep"
+     provides="zojax.layoutform.interfaces.IPageletFormView"
+     permission="zope.View"
+     weight="10" />
+
+  <zojax:pagelet
+     name="index.html"
+     for="zojax.content.ext_content_link"
+     class=".attach.AddLinkForm"
+     permission="zope.View" />
+
+  <browser:icon
+     name="zmi_icon"
+     for="..interfaces.ILink"
+     file="link_icon.gif" />
+
+  <browser:icon
+     name="zmi_icon"
+     for="zojax.content.ext_content_link"
+     file="link_icon.gif" />
+
+  <!-- universal attachments access -->
+  <adapter
+     name="content.attachment"
+     factory=".publisher.Attachment" />
+
+  <class class=".publisher.Attachment">
+    <allow interface="zope.publisher.interfaces.IPublishTraverse" />
+  </class>
+
+  <adapter
+     name="content.attachments"
+     factory=".publisher.Attachments" />
+
+  <class class=".publisher.Attachments">
+    <allow interface="zope.publisher.interfaces.IPublishTraverse" />
+  </class>
+
+  <adapter
+     name="content.attachment"
+     provides="zope.interface.Interface"
+     factory=".publisher.InplaceAttachment" />
+
+  <class class=".publisher.InplaceAttachment">
+    <allow interface="zope.publisher.interfaces.IPublishTraverse" />
+  </class>
+
+  <!-- image manager js api -->
+  <browser:page
+     name="imageManagerAPI"
+     for="..interfaces.IAttachmentsExtension"
+     class=".jsapi.ImageManagerAPI"
+     permission="zope.Public" />
+
+  <browser:page
+     name="listing"
+     for=".jsapi.IImageManagerAPI"
+     class=".jsapi.Images"
+     permission="zope.View" />
+
+  <browser:page
+     name="upload"
+     for=".jsapi.IImageManagerAPI"
+     class=".jsapi.FileUpload"
+     permission="zojax.ModifyContent" />
+
+  <browser:page
+     name="remove"
+     for=".jsapi.IImageManagerAPI"
+     class=".jsapi.FileRemove"
+     permission="zojax.ModifyContent" />
+
+</configure>

@@ -1,0 +1,210 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:i18n="http://namespaces.zope.org/i18n"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   i18n_domain="zojax.content.attachment">
+
+  <permission
+     id="zojax.AddContentAttachment"
+     title="Add content attachment" />
+     
+  <include file="permissions.zcml" />
+
+  <!-- Extension -->
+  <zojax:extension
+     title="Attachments"
+     description="Content attachments extension."
+     name="content.attachments"
+     schema=".interfaces.IAttachmentsExtension"
+     for=".interfaces.IAttachmentsAware"
+     class=".extension.AttachmentsExtension"
+     permission="zojax.ModifyContent">
+    <require
+       permission="zope.View"
+       interface="zojax.content.type.interfaces.IItem
+		  zope.app.container.interfaces.IReadContainer" />
+    <require
+       permission="zojax.ModifyContent"
+       interface="zope.app.container.interfaces.IWriteContainer" />
+    <require
+       permission="zojax.AddContentAttachment"
+       attributes="__setitem__" />
+  </zojax:extension>
+
+  <!-- attachments container -->
+  <zojax:content
+     name="ext.content.container"
+     title="Attachments Container"
+     schema=".interfaces.IAttachmentsExtension"
+     class=".extension.AttachmentsExtension"
+     contains=".interfaces.IAttachmentContentType"
+     type="zojax.content.type.interfaces.IInactiveType" />
+
+  <class class=".extension.AttachmentsExtension">
+    <implements interface="zojax.ownership.interfaces.IInheritOwnership" />
+  </class>
+
+  <adapter
+     for=".extension.AttachmentsExtension"
+     provides="zojax.content.type.interfaces.IOrder"
+     factory="zojax.extensions.container.ConfigletContainerOrder" />
+
+  <adapter
+     for=".extension.ExtensionData"
+     provides="zojax.content.type.interfaces.IOrder"
+     factory="zojax.content.type.order.Reordable" />
+
+  <adapter factory=".extension.ExtensionDataFactory" />
+
+  <class class=".extension.ExtensionData">
+    <require
+       permission="zojax.ModifyContent"
+       interface="zope.app.container.interfaces.IContainer" />
+  </class>
+
+  <subscriber handler=".extension.contentRemoved" />
+
+  <!-- file -->
+  <zojax:content
+     title="File"
+     name="ext.content.file"
+     schema=".interfaces.IFile"
+     class=".file.File"
+     description="File attachment."
+     containers="ext.content.container"
+     type=".interfaces.IAttachmentContentType"
+     permission="zojax.AddContentAttachment" />
+
+  <class class=".file.File">
+    <implements interface="zojax.ownership.interfaces.IOwnerAware" />
+
+    <require
+       permission="zope.View"
+       interface=".interfaces.IFile" />
+    <require
+       set_schema=".interfaces.IFile"
+       permission="zojax.ModifyContent" />
+  </class>
+
+  <adapter factory=".file.Sized" />
+
+  <!-- link -->
+  <zojax:content
+     title="Link"
+     name="ext.content.link"
+     schema=".interfaces.ILink"
+     class=".link.Link"
+     description="Link attachment."
+     containers="ext.content.container"
+     type=".interfaces.IAttachmentContentType"
+     permission="zojax.AddContentAttachment" />
+
+  <class class=".link.Link">
+    <implements interface="zojax.ownership.interfaces.IOwnerAware" />
+
+    <require
+       permission="zope.View"
+       interface=".interfaces.ILink" />
+    <require
+       permission="zojax.ModifyContent"
+       set_schema=".interfaces.ILink" />
+  </class>
+
+  <!-- image -->
+  <zojax:content
+     title="Image"
+     name="ext.content.image"
+     schema=".interfaces.IImage"
+     class=".image.Image"
+     description="Image attachment with previews."
+     containers="ext.content.container"
+     type=".interfaces.IAttachmentContentType"
+     permission="zojax.AddContentAttachment" />
+
+  <class class=".image.Image">
+    <implements interface="zojax.ownership.interfaces.IOwnerAware" />
+
+    <require
+       permission="zope.View"
+       interface=".interfaces.IImage" />
+    <require
+       permission="zojax.ModifyContent"
+       set_schema=".interfaces.IImage" />
+  </class>
+
+  <subscriber handler=".image.imageModifiedHandler" />
+
+  <!-- media -->
+  <zojax:content
+     title="Media"
+     name="ext.content.media"
+     schema=".interfaces.IMedia"
+     class=".media.Media"
+     description="Media attachment"
+     containers="ext.content.container"
+     type=".interfaces.IAttachmentContentType"
+     permission="zojax.AddContentAttachment" />
+
+  <class class=".media.Media">
+    <implements interface="zojax.ownership.interfaces.IOwnerAware" />
+
+    <require
+       permission="zope.View"
+       interface=".interfaces.IMedia" />
+    <require
+       permission="zojax.ModifyContent"
+       set_schema=".interfaces.IMedia" />
+  </class>
+
+  <subscriber handler=".media.mediaAddedHandler" />
+
+  <!-- preview folder -->
+  <class class=".preview.PreviewFolder">
+    <require
+       permission="zope.View"
+       interface="zope.app.container.interfaces.IReadContainer" />
+    <require
+       permission="zojax.ModifyContent"
+       interface=".interfaces.IPreviewFolder
+		  zope.app.container.interfaces.IWriteContainer" />
+  </class>
+
+  <class class=".preview.MediaPreviewFolder">
+    <require
+       permission="zope.View"
+       interface="zope.app.container.interfaces.IReadContainer" />
+    <require
+       permission="zojax.ModifyContent"
+       interface=".interfaces.IPreviewFolder
+		  zope.app.container.interfaces.IWriteContainer" />
+  </class>
+
+  <!-- vocabulary -->
+  <utility
+     name="content.attachments.all"
+     factory=".vocabulary.AllVocabulary" />
+
+  <utility
+     name="content.attachments.images"
+     factory=".vocabulary.ImagesVocabulary" />
+
+  <utility
+     name="content.attachments.medias"
+     factory=".vocabulary.MediasVocabulary" />
+
+  <!-- browser views -->
+  <include package=".browser" />
+
+  <!-- translations -->
+  <i18n:registerTranslations directory="locales"/>
+
+  <!-- generations -->
+  <utility
+     name="zojax.content.attachment"
+     provides="zope.app.generations.interfaces.ISchemaManager"
+     component=".generations.schemaManager" />
+
+  <!-- top contributors support -->
+  <include file="topcontributors.zcml" />
+
+</configure>

@@ -1,0 +1,20 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:i18n="http://namespaces.zope.org/i18n"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   i18n_domain="zojax.content.featured">
+
+  <!-- permissions -->
+  <zojax:permission
+     permission="zojax.AddContentAttachment"
+     category="zojax.content.permissions.interfaces.IManagementPermission" />
+
+  <zojax:contentpermission
+     for="zojax.content.space.interfaces.IContentSpace"
+     contenttype="content.space"
+     permission="zojax.AddContentAttachment"
+     managepermission="zojax.ManageContentPermission"
+     class="zojax.content.permissions.content.ContentPermission"
+     category="zojax.content.permissions.interfaces.IManagementPermission" />
+
+</configure>

@@ -1,0 +1,41 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:zojax="http://namespaces.zope.org/zojax"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   i18n_domain="zojax.content.attachment">
+  
+  <zojax:pagelet
+     name="attachments"
+     type="wizard.step"
+     for="..interfaces.IAttachmentsAware
+	  zojax.content.forms.interfaces.IEditContentWizard"
+     template="editwizard.pt"
+     class=".editwizard.AttachmentsStep"
+     permission="zojax.ModifyContent" />
+
+  <adapter
+     name="name"
+     factory=".editwizard.ContentsNameColumn" />
+
+  <adapter
+     name="name"
+     for=".editwizard.IWizardAttachmentsExtension *
+	  zojax.content.browser.interfaces.IRenameContainerContents"
+     factory="zojax.content.browser.table.RenameNameColumn" />
+
+  <zcml:configure
+     xmlns:zcml="http://namespaces.zope.org/zcml"
+     xmlns:condition="installed zojax.content.draft">
+
+    <zojax:pagelet
+       name="attachments"
+       type="wizard.step"
+       for="..interfaces.IAttachmentsAware
+	    zojax.content.forms.interfaces.IAddContentWizard"
+       template="editwizard.pt"
+       class=".editwizard.AttachmentsStep"
+       permission="zojax.ModifyContent" />
+
+  </zcml:configure>
+
+</configure>
