@@ -1,0 +1,7 @@
+<div class="z-form-fieldset" i18n:domain="zojax.content.attachment">
+  <br />
+  <tal:block i18n:translate="">Attachment link</tal:block>:
+  <a target="_blank" tal:attributes="href view/url" tal:content="view/url"></a>
+  <br />
+  <br />
+</div>

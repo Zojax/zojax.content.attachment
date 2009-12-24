@@ -1,0 +1,585 @@
+=============================
+Content Attachments extension
+=============================
+
+  >>> from zope import interface
+  >>> from zope.proxy import removeAllProxies
+  >>> from zope.app.intid import IntIds
+  >>> from zope.app.intid.interfaces import IIntIds
+  >>> from zope.app.component.hooks import setSite
+  >>> from zojax.content.attachment import interfaces
+  >>> from zojax.content.attachment.tests.content import Content
+  >>> from zojax.content.attachment.tests.tests import zojaxAttachLayer
+
+IIntIds utility
+
+  >>> root = zojaxAttachLayer.setup.getRootFolder()
+  >>> ids = root['ids']
+  >>> sm = root.getSiteManager()
+
+Attachments
+
+  >>> from zope.testbrowser.testing import Browser
+
+  >>> actor = Browser()
+  >>> actor.addHeader("Authorization", "Basic mgr:mgrpw")
+  >>> actor.handleErrors = False
+
+  >>> actor.open("http://localhost/content/++extensions++")
+  >>> actor.getLink('Attachments').click()
+
+Attachment container
+--------------------
+
+  >>> print actor.contents
+  <html>
+  ...
+  <div class="z-table-emtpy">There are no items in this container.</div>
+  ...
+  <h2>Add new content</h2>
+  ...
+  <a href=".../content.attachments/+/ext.content.file/">File</a>
+  <div class="byline">
+    File attachment. &nbsp;
+  </div>
+  ...
+  <a href=".../content.attachments/+/ext.content.image/">Image</a>
+  <div class="byline">
+    Image attachment with previews. &nbsp;
+  </div>
+  ...
+  <a href=".../content.attachments/+/ext.content.link/">Link</a>
+  <div class="byline">
+    Link attachment. &nbsp;
+  </div>
+  ...
+  <a href=".../content.attachments/+/ext.content.media/">Media</a>
+  <div class="byline">
+    Media attachment &nbsp;
+  </div>
+  ...
+  </html>
+
+
+Link
+=====
+
+Add Link
+
+  >>> actor.getLink('Link').click()
+  >>> actor.getControl(name='content.add.widgets.title').value = u'zojax homesite'
+  >>> actor.getControl(name='content.add.widgets.url').value = u'http://zojax.net/'
+  >>> actor.getControl(name='add_input_name').value = u'zojax'
+  >>> actor.getControl(name='content.add.buttons.add').click()
+
+  >>> print actor.contents
+  <html>
+  ...
+  <h1 class="z-content-title">zojax homesite</h1>
+  ...
+  <span>The link address is:</span>
+  <a href="http://zojax.net/">http://zojax.net/</a>
+  ...
+  </html>
+
+  >>> actor.getLink('Attachments').click()
+  >>> print actor.contents
+  <html>
+  ...
+  <tr class="z-table-record odd">
+    <td class="z-table-cell-min"><input type="checkbox" name="ids:list" value="zojax" /></td> <td class="z-table-cell-min"><img src="..." alt="Link" width="16" height="16" border="0" /></td> <td><a href="http://localhost/content/++extensions++/content.attachments/zojax/context.html">zojax</a></td> <td>zojax homesite</td> <td>...</td> <td>Link</td>
+  </tr>
+  ...
+  </html>
+
+
+Edit link
+
+  >>> actor.getLink(url='content.attachments/zojax/').click()
+  >>> actor.getLink('Content').click()
+  >>> actor.getControl('Title').value = u'zojax HomePage'
+  >>> actor.getControl(name="content.edit.buttons.save").click()
+  >>> actor.getLink('View').click()
+  >>> print actor.contents
+  <html>
+  ...
+  <h1 class="z-content-title">zojax HomePage</h1>
+  ...
+  <span>The link address is:</span>
+  <a href="http://zojax.net/">http://zojax.net/</a>
+  ...
+  </html>
+
+
+File
+====
+
+  >>> actor.open("http://localhost/content/++extensions++/")
+  >>> actor.getLink('Attachments').click()
+  >>> actor.getLink('File').click()
+
+  >>> import os.path
+  >>> filePath = os.path.join(os.path.split(__file__)[0], 'image.jpg')
+
+  >>> actor.getControl('Title').value = 'Test file'
+  >>> fileControl = actor.getControl(name='content.add.widgets.data').mech_control
+  >>> fileControl.add_file(open(filePath), filename='file')
+  >>> actor.getControl(name='content.add.buttons.add').click()
+
+  >>> actor.getLink('Attachments').click()
+  >>> print actor.contents
+  <html>
+  ...
+  ...<a href=".../zojax/context.html">...zojax HomePage...
+  ...<a href=".../file/context.html">...Test file...
+  ...
+  </html>
+
+  >>> actor.getLink('file').click()
+  >>> actor.getLink('Content').click()
+  >>> actor.getControl('Title').value = u'Test attachment'
+  >>> actor.getControl(name="content.edit.buttons.save").click()
+  >>> actor.getLink('View').click()
+  >>> print actor.contents
+  <html>
+  ...
+  <h1 class="z-content-title">Test attachment</h1>
+  ...
+  <br />
+  Attachment link:
+  <a target="_blank"
+     href="http://localhost/@@content.attachment/...">http://localhost/@@content.attachment/...</a>
+  <br />
+  <br />
+  ...
+  </html>
+
+  >>> actor.open(
+  ...     'http://localhost/content/++extensions++/content.attachments/file')
+  >>> actor.open('http://localhost/content/++extensions++/')
+
+  >>> from zojax.content.attachment.interfaces import IImage, IMedia, IAttachmentsExtension
+  >>> extension = IAttachmentsExtension(root['content'])
+  >>> bool(extension['file'])
+  True
+
+  >>> extension.get('file')
+  <zojax.content.attachment.file.File ...>
+
+We have special index helper for attachments, which returns text content
+ of attachment with preparse
+
+We upload text attachment
+
+  >>> actor.open("http://localhost/content/++extensions++/")
+  >>> actor.getLink('Attachments').click()
+  >>> actor.getLink('File').click()
+
+  >>> import os.path
+  >>> filePath = os.path.join(os.path.split(__file__)[0], 'text.txt')
+
+  >>> actor.getControl('Title').value = 'Test text file'
+  >>> fileControl = actor.getControl(name='content.add.widgets.data').mech_control
+  >>> fileControl.add_file(open(filePath), filename='text.txt')
+  >>> actor.getControl(name='content.add.buttons.add').click()
+
+  >>> from zojax.content.attachment import indexes
+  >>> indexes.getAttachmentsContent(root['content'])
+  u'some file text'
+
+We remove attachment
+  >>> actor.open('http://localhost/content/++extensions++/content.attachments/')
+  >>> actor.getControl(name='ids:list').value = ['text.txt']
+  >>> actor.getControl(name="form.buttons.delete").click()
+
+Image
+=====
+
+  >>> actor.open("http://localhost/content/++extensions++/")
+  >>> actor.getLink('Attachments').click()
+  >>> actor.getLink('Image').click()
+
+  >>> filePath = os.path.join(os.path.split(__file__)[0], 'image.jpg')
+  >>> actor.getControl('Title').value = 'Test file'
+  >>> fileControl = actor.getControl('Attachment').mech_control
+  >>> fileControl.add_file(open(filePath), filename='image.jpg')
+  >>> actor.getControl(name='add_input_name').value = 'image'
+  >>> actor.getControl(name='content.add.buttons.add').click()
+
+  >>> actor.getLink('Attachments').click()
+  >>> print actor.contents
+  <html>
+  ...
+  ...<a href=".../zojax/context.html">...zojax HomePage...
+  ...<a href=".../file/context.html">...Test attachment...
+  ...<a href=".../image/context.html">...Test file...
+  ...
+  </html>
+
+  >>> actor.getLink('image').click()
+  >>> actor.getLink('Content').click()
+  >>> actor.getControl('Title').value = u'Test image'
+  >>> actor.getControl(name="content.edit.buttons.save").click()
+  >>> actor.open('http://localhost/content/++extensions++/content.attachments/image/context.html')
+  >>> print actor.contents
+  <html>
+  ...
+  <h1 class="z-content-title">Test image</h1>
+  ...
+  <br />
+  Attachment link:
+  <a target="_blank"
+       href="http://localhost/@@content.attachment/...">http://localhost/@@content.attachment/...</a>
+  <br />
+  <br />
+  ...
+  </html>
+
+  >>> actor.open(
+  ...     'http://localhost/content/++extensions++/content.attachments/image')
+
+  >>> img = extension['image']
+  >>> IImage.providedBy(img)
+  True
+  >>> img.width, img.height
+  (450, 450)
+
+  >>> for a in extension:
+  ...     print a
+  file
+  image
+  zojax
+
+
+Image preview
+-------------
+
+Generate
+
+  >>> actor.open('http://localhost/content/++extensions++/content.attachments/image/context.html')
+  >>> actor.getLink('Previews').click()
+  >>> actor.getControl('Width').value = '120'
+  >>> actor.getControl('Height').value = '120'
+  >>> actor.getControl(name='previews.buttons.generate').click()
+
+  >>> print actor.contents
+  <html>
+  ...
+  <a href="http://localhost/@@content.attachment/.../preview/120x120/">120x120</a>...
+  ...
+  </html>
+
+View
+
+  >>> actor.getLink('120x120').click()
+  >>> actor.url
+  'http://localhost/@@content.attachment/.../preview/120x120/'
+  >>> actor.contents[:10]
+  '\xff\xd8\xff\xe0\x00\x10JFIF'
+
+Remove
+
+  >>> actor.open('http://localhost/content/++extensions++/content.attachments/image/context.html')
+  >>> actor.getLink('Previews').click()
+  >>> actor.getControl(name='preview:list').value = ['120x120']
+  >>> actor.getControl(name='form.remove').click()
+  >>> actor.open('http://localhost/content/++extensions++/content.attachments/image/preview/120x120/')
+  Traceback (most recent call last):
+  ...
+  NotFound: ...
+
+  >>> img = extension['image']
+  >>> preview = img.preview.generatePreview(100, 80)
+  >>> img.preview.generatePreview(100, 80) is preview
+  True
+
+  >>> img.preview.clear()
+  >>> list(img.preview.keys())
+  []
+
+
+Media
+=====
+
+  >>> actor.open("http://localhost/content/++extensions++/")
+  >>> actor.getLink('Attachments').click()
+  >>> actor.getLink('Media').click()
+
+  >>> actor.getControl('Title').value = 'Test media'
+  >>> fileControl = actor.getControl('Media data').mech_control
+  >>> fileControl.add_file(open(filePath), filename='bell.ogg')
+  >>> actor.getControl(name='content.add.widgets.autoplay:list').value = ['true']
+  >>> actor.getControl('Type').value = ''
+  >>> actor.getControl(name='add_input_name').value = 'media'
+  >>> actor.getControl(name='content.add.buttons.add').click()
+
+  >>> actor.getLink('Attachments').click()
+  >>> print actor.contents
+  <html>
+  ...
+  ...<a href=".../zojax/context.html">...zojax HomePage...
+  ...<a href=".../file/context.html">...Test attachment...
+  ...<a href=".../image/context.html">...Test image...
+  ...<a href=".../media/context.html">...Test media...
+  ...
+  </html>
+
+  >>> actor.getLink('media').click()
+  >>> actor.getLink('Content').click()
+  >>> actor.getControl('Title').value = u'Test media'
+  >>> actor.getControl('Type').value
+  'ogg'
+  >>> actor.getControl(name="content.edit.buttons.save").click()
+  >>> actor.open('http://localhost/content/++extensions++/content.attachments/media/context.html')
+  >>> print actor.contents
+  <html>
+  ...
+  <h1 class="z-content-title">Test media</h1>
+  ...
+  <br />
+  Attachment link:
+  <a target="_blank"
+       href="http://localhost/@@content.attachment/...">http://localhost/@@content.attachment/...</a>
+  <br />
+  <br />
+  ...
+  </html>
+
+  >>> actor.open(
+  ...     'http://localhost/content/++extensions++/content.attachments/media')
+
+  >>> media = extension['media']
+  >>> IMedia.providedBy(media)
+  True
+  >>> media.mediaType
+  u'ogg'
+
+  >>> for a in extension:
+  ...     print a
+  file
+  image
+  media
+  zojax
+
+
+Media preview
+-------------
+
+Generate
+
+  >>> actor.open('http://localhost/content/++extensions++/content.attachments/media/context.html')
+  >>> actor.getLink('Previews').click()
+  >>> actor.getControl('Width').value = '120'
+  >>> actor.getControl('Height').value = '120'
+  >>> actor.getControl(name='previews.buttons.generate').click()
+
+  >>> print actor.contents
+  <html>
+  ...
+  <a href="http://localhost/@@content.attachment/.../preview/120x120/">120x120</a>...
+  ...
+  </html>
+
+View
+
+  >>> actor.getLink('120x120').click()
+  >>> actor.url
+  'http://localhost/@@content.attachment/.../preview/120x120/'
+  >>> actor.contents[:10]
+  '\xff\xd8\xff\xe0\x00\x10JFIF'
+
+Remove
+
+  >>> actor.open('http://localhost/content/++extensions++/content.attachments/media/context.html')
+  >>> actor.getLink('Previews').click()
+  >>> actor.getControl(name='preview:list').value = ['120x120']
+  >>> actor.getControl(name='form.remove').click()
+  >>> actor.open('http://localhost/content/++extensions++/content.attachments/media/preview/120x120/')
+  Traceback (most recent call last):
+  ...
+  NotFound: ...
+
+  >>> media = extension['media']
+  >>> preview = media.preview.generatePreview(100, 80)
+  >>> media.preview.generatePreview(100, 80) is preview
+  True
+
+  >>> media.preview.clear()
+  >>> list(media.preview.keys())
+  []
+
+Edit content wizard step
+------------------------
+
+  >>> actor.open('http://localhost/content/context.html')
+  >>> actor.getLink('Attachments').click()
+  >>> print actor.contents
+  <html>
+  ...
+  <td><a target="_blank" href="http://localhost/@@content.attachment/.../">file</a></td> <td>Test attachment</td> <td>... KB</td> <td>File</td>
+  ...
+  <td><a target="_blank" href="http://localhost/@@content.attachment/.../">image</a></td> <td>Test image</td> <td>... KB</td> <td>Image</td>
+  ...
+  <td><a target="_blank" href="http://localhost/@@content.attachment/.../">media</a></td> <td>Test media</td> <td>... KB</td> <td>Media</td>
+  ...
+  <td><a target="_blank" href="http://localhost/@@content.attachment/.../">zojax</a></td> <td>zojax HomePage</td> <td>...</td> <td>Link</td>
+  ...
+  </html>
+
+  >>> actor.getLink('Link').click()
+  >>> actor.getControl(name='content.add.widgets.title').value = u'zope homesite'
+  >>> actor.getControl(name='content.add.widgets.url').value = u'http://zope.org/'
+  >>> actor.getControl(name='add_input_name').value = u'zope.org'
+  >>> actor.getControl(name='content.add.buttons.add').click()
+  >>> print actor.contents
+  <html>
+  ...
+  <td><a target="_blank" href="http://localhost/@@content.attachment/.../">zope.org</a></td> <td>zope homesite</td> <td>...</td> <td>Link</td>
+  ...
+  </html>
+
+  >>> actor.getControl(name="ids:list").value = ['zope.org']
+  >>> actor.getControl(name="form.buttons.delete").click()
+  >>> 'zope homepage' in actor.contents
+  False
+
+
+Attachments namespace
+---------------------
+We can access attachments extensions with ++attachments++ namespace
+
+  >>> actor.open('http://localhost/@@content.attachments/unknown/')
+  Traceback (most recent call last):
+  ...
+  NotFound: ...
+  >>> actor.open('http://localhost/@@content.attachments/123131/')
+  Traceback (most recent call last):
+  ...
+  NotFound: ...
+
+  >>> id = ids.queryId(root['content'])
+
+  >>> actor.open('http://localhost/@@content.attachments/%s/'%id)
+  >>> print actor.contents
+  <html>
+  ...
+  <td>zojax HomePage</td>
+  ...
+  <td>Test attachment</td>
+  ...
+  <td>Test image</td>
+  ...
+  </html>
+
+
+Attachment namespace
+--------------------
+
+  >>> actor.open('http://localhost/@@content.attachment/unknown/')
+  Traceback (most recent call last):
+  ...
+  NotFound: ...
+  >>> actor.open('http://localhost/@@content.attachment/123131/')
+  Traceback (most recent call last):
+  ...
+  NotFound: ...
+
+  >>> extension = IAttachmentsExtension(root['content'])
+  >>> imgId = ids.queryId(extension['image'])
+
+  >>> actor.open('http://localhost/@@content.attachment/%s/'%imgId)
+  >>> actor.contents[:10]
+  '\xff\xd8\xff\xe0\x00\x10JFIF'
+
+
+Image manage json api
+---------------------
+
+  >>> url = 'http://localhost/@@content.attachments/%s/'%id
+
+  >>> actor.open(url + '/imageManagerAPI/listing')
+  >>> print actor.contents
+  {"images": [{"name": "image", "title": "Test image", "url": "@@content.attachment/...", "height": 450, "width": 450, "preview": "http://localhost/content.attachment/.../preview/150x150/", "id": ..., "size": 16919}]}
+
+  >>> actor.open(url + '/imageManagerAPI/listing?pw=n&ph=n')
+  >>> print actor.contents
+  {"images": [{"name": "image", "title": "Test image", "url": "@@content.attachment/...", "height": 450, "width": 450, "preview": "http://localhost/content.attachment/.../preview/150x150/", "id": ..., "size": 16919}]}
+
+  >>> actor.open(url + '/imageManagerAPI/listing?pw=80&ph=80')
+  >>> print actor.contents
+  {"images": [{"name": "image", "title": "Test image", "url": "@@content.attachment/...", "height": 450, "width": 450, "preview": "http://localhost/content.attachment/.../preview/80x80/", "id": ..., "size": 16919}]}
+
+Media manage json api
+---------------------
+
+  >>> url = 'http://localhost/@@content.attachments/%s/'%id
+
+  >>> actor.open(url + '/mediaManagerAPI/listing')
+  >>> print actor.contents
+  {"medias": [{"preview": "http://localhost/content.attachment/.../preview/150x150/", "description": "", "title": "Test media", "url": "@@content.attachment/...", "name": "media", "size": 16919, "type": "ogg", "id": ..., "autoplay": true}]}
+
+  >>> actor.open(url + '/mediaManagerAPI/listing?pw=n&ph=n')
+  >>> print actor.contents
+  {"medias": [{"preview": "http://localhost/content.attachment/.../preview/150x150/", "description": "", "title": "Test media", "url": "@@content.attachment/...", "name": "media", "size": 16919, "type": "ogg", "id": ..., "autoplay": true}]}
+
+  >>> actor.open(url + '/mediaManagerAPI/listing?pw=80&ph=60')
+  >>> print actor.contents
+  {"medias": [{"preview": "http://localhost/content.attachment/.../preview/80x60/", "description": "", "title": "Test media", "url": "@@content.attachment/...", "name": "media", "size": 16919, "type": "ogg", "id": ..., "autoplay": true}]}
+
+
+Vocabularies
+------------
+
+  >>> from zope.schema.interfaces import IVocabularyFactory
+  >>> allVoc = sm.getUtility(IVocabularyFactory, 'content.attachments.all')
+  >>> for term in allVoc(extension):
+  ...     print '"%s" "%s"'%(term.value, term.title)
+  "file" "Test attachment (file)"
+  "image" "Test image (image)"
+  "media" "Test media (media)"
+  "zojax" "zojax HomePage (zojax)"
+
+  >>> len(allVoc(root))
+  0
+
+  >>> imagesVoc = sm.getUtility(IVocabularyFactory, 'content.attachments.images')
+  >>> for term in imagesVoc(extension):
+  ...     print '"%s" "%s"'%(term.value, term.title)
+  "image" "Test image (image)"
+
+  >>> len(imagesVoc(root))
+  0
+
+
+Attachment renaming
+-------------------
+
+  >>> image = extension['image']
+  >>> imageid = root['ids'].getId(image)
+
+  >>> actor.open('http://localhost/content/++extensions++/content.attachments/')
+  >>> actor.getControl(name='ids:list').value = ['image']
+  >>> actor.getControl(name="form.buttons.rename").click()
+
+  >>> actor.getControl(name='newIds:list').value = u'image10'
+  >>> actor.getControl(name="form.buttons.apply").click()
+
+  >>> image = extension['image10']
+  >>> imageid == root['ids'].getId(image)
+  True
+
+
+Attachment removing
+-------------------
+
+  >>> actor.open('http://localhost/content/++extensions++/content.attachments/')
+  >>> actor.getControl(name='ids:list').value = ['file', 'image10', 'media']
+  >>> actor.getControl(name="form.buttons.delete").click()
+  >>> print actor.contents
+  <html>
+  ...
+  ...<div class="statusMessage">Selected items has been removed.</div>...
+  ...
+  </html>
+
+  >>> setSite(None)

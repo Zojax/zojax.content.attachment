@@ -1,0 +1,9 @@
+<tal:block tal:define="context nocall:view/attachments">
+  <h2 tal:content="context/__title__"></h2>
+  <div class="z-page-description" tal:content="context/__description__"></div>
+
+  <tal:block tal:content="structure provider:content.container.contents" />
+
+  <br />
+  <div tal:content="structure view/adding/render"></div>
+</tal:block>

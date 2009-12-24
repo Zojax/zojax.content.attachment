@@ -1,0 +1,122 @@
+=======
+CHANGES
+=======
+
+1.3.4 (2009-11-30)
+------------------
+
+- Fixed content.attachments publisher security
+
+- Added zojax permission for add content attachment
+
+
+1.3.3 (2009-08-13)
+------------------
+
+- Fixed content.attachment traverser
+
+- Added inplace attach view
+
+- Use full url for preview in jsapi
+
+
+1.3.2 (2009-06-21)
+------------------
+
+- Caching issue for attachment publisher
+
+- Helpder function for attachments indexing
+
+- Remove 'zojax.content.extension' dependency
+
+- Added support for 'zojax.topcontributors'
+
+- Copyright changed to 'Zope Foundation and Contributors'
+
+
+1.3.1 (2009-05-21)
+------------------
+
+- Use new zojax.converter api
+
+
+1.3.0 (2009-05-05)
+------------------
+
+- Added new permission zojax.AddContentAttachment for adding attachments
+
+- Do not use z3c.autoinclude
+
+- Mark attachments as owner aware
+
+
+1.2.0 (2009-03-14)
+------------------
+
+- Use new content edit wizard
+
+- Added 'Attachment' step from content edit wizard
+
+- Fixed attachment renaming bug
+
+- Remove attachments on content removing
+
+- Media attachment type
+
+
+1.1.0 (2009-01-20)
+------------------
+
+- Replace ++attachmet(s)++ namespaces with @@content.attachment(s) view
+
+- Added 'Attachment type' field to File attachment (content disposition)
+
+- Added zojax.content.draft support
+
+
+1.0.0 (2008-12-31)
+------------------
+
+- Added image management json api
+
+- Added ++attachment++ namespace
+
+- Added ++attachments++ namespace
+
+- Added IAttachmentsAware marker interface
+
+
+0.99.4 (2008-12-22)
+-------------------
+
+- Fixed tests with ZODB3.9
+
+
+0.99.3 (2008-11-27)
+-------------------
+
+- Fixed install generations
+
+
+0.99.2 (2008-11-25)
+-------------------
+
+- Fixed attachment removing
+
+
+0.99.1 (2008-11-22)
+-------------------
+
+- Added link icon
+
+- Redirect to url as default view for link
+
+- Added dutch translation
+
+- Fixed wrong imports
+
+
+0.99.0 (2008-11-17)
+-------------------
+
+- Initial release
