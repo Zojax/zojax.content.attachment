@@ -11,6 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from zope.dublincore.interfaces import IDCTimes
 """
 
 $Id$
@@ -123,6 +124,8 @@ class Images(object):
                         'width': image.width,
                         'height': image.height,
                         'size': len(image.data),
+                        'modified': IDCTimes(image).modified.isoformat()[:19].replace('T',' ')
+,
                         'url': '@@content.attachment/%s'%id,
                         'preview': '%s/content.attachment/%s/preview/%sx%s/'%(
                                siteUrl, id, width, height),
@@ -150,7 +153,7 @@ class FileUpload(object):
         if IImage.providedBy(content):
             field = IImage['data'].bind(content)
             field.set(content, image)
-            return encoder.encode({'success': 'true', 'message': ''})
+            return encoder.encode({'success': 'true', 'message': '', 'file': name})
         elif name in container:
             del container[name]
 
@@ -160,7 +163,7 @@ class FileUpload(object):
         field = IImage['data'].bind(content)
         field.set(content, image)
         return encoder.encode(
-            {'success': 'true', 'message': '', 'file': image.filename})
+            {'success': 'true', 'message': '', 'file': name})
 
 
 class FileRemove(object):
@@ -213,6 +216,7 @@ class Medias(object):
                         'type': media.mediaType,
                         'autoplay': media.autoplay,
                         'size': len(media.data),
+                        'modified': IDCTimes(media).modified.isoformat()[:19].replace('T',' '),
                         'url': '@@content.attachment/%s'%id,
                         'preview': '%s/content.attachment/%s/preview/%sx%s/'%(
                            siteUrl, id, width, height),
@@ -257,7 +261,7 @@ class MediaFileUpload(object):
             field.set(content, title)
             field = IMedia['description'].bind(content)
             field.set(content, description)
-            return encoder.encode({'success': 'true', 'message': ''})
+            return encoder.encode({'success': 'true', 'message': '', 'file': name})
         elif name in container:
             del container[name]
         content = Media()
@@ -274,7 +278,7 @@ class MediaFileUpload(object):
         field = IMedia['description'].bind(content)
         field.set(content, description)
         return encoder.encode(
-            {'success': 'true', 'message': '', 'file': media.filename})
+            {'success': 'true', 'message': '', 'file': name})
 
 
 class MediaFileRemove(object):
