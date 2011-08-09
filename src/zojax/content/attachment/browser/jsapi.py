@@ -12,6 +12,7 @@
 #
 ##############################################################################
 from zope.dublincore.interfaces import IDCTimes
+from zojax.filefield.data import FileData
 """
 
 $Id$
@@ -49,7 +50,6 @@ def jsonable(func):
     def cal(self):
         self.request.response.setHeader('Content-Type', 'text/html')
         return unicode(func(self))
-
     return cal
 
 
@@ -114,7 +114,7 @@ class Images(object):
 
         data = []
         for name, image in container.items():
-            if IImage.providedBy(image) and image:
+            if IImage.providedBy(image) and image.data is not None:
                 id = ids.queryId(removeAllProxies(image))
                 removeAllProxies(image.preview).generatePreview(width, height)
 
@@ -146,13 +146,12 @@ class FileUpload(object):
 
         if not image:
             return encoder.encode({'success': 'false', 'message': ''})
-
         name = os.path.split(image.filename)[-1]
 
         content = container.get(name)
+        image = FileData(image)
         if IImage.providedBy(content):
-            field = IImage['data'].bind(content)
-            field.set(content, image)
+            content.data = image
             return encoder.encode({'success': 'true', 'message': '', 'file': name})
         elif name in container:
             del container[name]
@@ -160,8 +159,7 @@ class FileUpload(object):
         content = Image()
         event.notify(ObjectCreatedEvent(content))
         container[name] = content
-        field = IImage['data'].bind(content)
-        field.set(content, image)
+        content.data = image
         return encoder.encode(
             {'success': 'true', 'message': '', 'file': name})
 

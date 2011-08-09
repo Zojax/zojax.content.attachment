@@ -38,7 +38,7 @@ class Image(PersistentItem):
         self.preview.__parent__ = self
 
     def __nonzero__(self):
-        return self.data.size > 0
+        return bool(self.data)
 
     @property
     def width(self):
