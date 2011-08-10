@@ -36,6 +36,8 @@ from zojax.content.attachment.media import Media
 from zojax.content.attachment.interfaces import IImage, IMedia
 from zope.app.component.hooks import getSite
 
+from zojax.filefield.data import getImageSize
+
 
 class Encoder(JSONEncoder):
 
@@ -117,18 +119,33 @@ class Images(object):
             if IImage.providedBy(image) and image.data is not None:
                 id = ids.queryId(removeAllProxies(image))
                 removeAllProxies(image.preview).generatePreview(width, height)
-
-                info = {'id': id,
+                # hotfix for large images:
+                maxSide = 480
+                if image.width > maxSide or image.height > maxSide:
+                    # generate thumb
+                    thumb = removeAllProxies(image.preview).generatePreview(maxSide, maxSide)
+                    thumb.width, thumb.height = getImageSize(thumb.data)
+                    # replace original image with thumb
+                    info = {'id': id,
+                        'name': image.__name__,
+                        'title': image.title or image.__name__,
+                        'width': thumb.width,
+                        'height': thumb.height,
+                        'size': len(thumb.data),
+                        'modified': IDCTimes(image).modified.isoformat()[:19].replace('T',' '),
+                        'url': '@@content.attachment/%s/preview/%sx%s/'%( id, maxSide, maxSide),
+                        'preview': '%s/content.attachment/%s/preview/%sx%s/'%(siteUrl, id, width, height),
+                        }
+                else:
+                    info = {'id': id,
                         'name': image.__name__,
                         'title': image.title or image.__name__,
                         'width': image.width,
                         'height': image.height,
                         'size': len(image.data),
-                        'modified': IDCTimes(image).modified.isoformat()[:19].replace('T',' ')
-,
+                        'modified': IDCTimes(image).modified.isoformat()[:19].replace('T',' '),
                         'url': '@@content.attachment/%s'%id,
-                        'preview': '%s/content.attachment/%s/preview/%sx%s/'%(
-                               siteUrl, id, width, height),
+                        'preview': '%s/content.attachment/%s/preview/%sx%s/'%(siteUrl, id, width, height),
                         }
                 data.append((image.title, image.__name__, info))
 
