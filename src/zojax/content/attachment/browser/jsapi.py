@@ -147,6 +147,7 @@ class Images(object):
                         'modified': IDCTimes(image).modified.isoformat()[:19].replace('T',' '),
                         'url': '@@content.attachment/%s'%id,
                         'preview': '%s/content.attachment/%s/preview/%sx%s/'%(siteUrl, id, width, height),
+                        'original': '',
                         }
                 data.append((image.title, image.__name__, info))
 

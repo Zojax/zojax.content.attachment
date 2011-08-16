@@ -52,7 +52,12 @@ class PreviewPublisherPlugin(object):
         if name in self.context:
             return LocationProxy(self.context[name], self.context, name)
         else:
-            raise NotFound(self.context, name, request)
+            # generating preview instead of NotFound error
+            dimensions = name.split('x')
+            image = self.context
+            preview = image.generatePreview(int(dimensions[0]), int(dimensions[1]))
+            return LocationProxy(self.context[name], preview, name)
+            #raise NotFound(self.context, name, request)
 
 
 class Attachment(object):
