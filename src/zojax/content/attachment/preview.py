@@ -36,7 +36,7 @@ class PreviewFolder(BTreeContainer):
     __name__ = u'preview'
 
     def clear(self):
-        for name in self.keys():
+        for name in list(self.keys()):
             del self[name]
 
     def generatePreview(self, width, height, mt='image/jpeg', quality=88):
@@ -73,7 +73,7 @@ class MediaPreviewFolder(BTreeContainer):
     __name__ = u'preview'
 
     def clear(self):
-        for name in self.keys():
+        for name in list(self.keys()):
             del self[name]
 
     def generatePreview(self, width, height, mt='image/jpeg', quality=88):

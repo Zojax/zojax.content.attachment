@@ -13,12 +13,16 @@
 ##############################################################################
 from zope.dublincore.interfaces import IDCTimes
 from zojax.filefield.data import FileData
+from zojax.content.type.interfaces import IContentType, IContentContainer, IItem
+from zope.app.container.interfaces import IContainer
+from zope.security.management import checkPermission
 """
 
 $Id$
 """
 import os.path
-from simplejson import JSONEncoder
+import datetime
+from simplejson import JSONEncoder, loads
 
 import transaction
 from zope import interface, event
@@ -63,6 +67,10 @@ class IMediaManagerAPI(interface.Interface):
     pass
 
 
+class IContentManagerAPI(interface.Interface):
+    pass
+
+
 class ImageManagerAPI(BrowserView):
     interface.implements(IImageManagerAPI)
 
@@ -86,6 +94,22 @@ class MediaManagerAPI(BrowserView):
         self.context = context
         self.request = request
         self.__parent__ = context.context
+
+    def publishTraverse(self, request, name):
+        view = queryMultiAdapter((self, request), name=name)
+        if view is not None:
+            return view
+
+        raise NotFound(self, name, request)
+
+
+class ContentManagerAPI(BrowserView):
+    interface.implements(IContentManagerAPI)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+        self.__parent__ = context
 
     def publishTraverse(self, request, name):
         view = queryMultiAdapter((self, request), name=name)
@@ -314,3 +338,38 @@ class MediaFileRemove(object):
                 del container[name]
 
         return encoder.encode({'success': 'true', 'message': ''})
+
+
+class ContentItems(object):
+
+    @jsonable
+    def __call__(self):
+        ids = getUtility(IIntIds)
+        request = self.request
+        node = request.form.get('node', 'root')
+        site = getSite()
+        container = site
+        try:
+            container = ids.getObject(int(node))
+        except (TypeError, KeyError, ValueError), e:
+            pass
+        siteUrl = absoluteURL(site, request)
+        data = []
+        for name, content in IContainer(container, {}).items():
+            id = ids.queryId(removeAllProxies(content))
+            content = IItem(content, None)
+            if content is None or not checkPermission('zope.View', content):
+                continue
+            info = {'id': id,
+                    'text': content.title or content.__name__,
+                    'description': content.description,
+                    'cls': IContainer.providedBy(content) and 'folder' or 'file',
+                    'leaf': not bool(IContainer.providedBy(content) and len(content)),
+                    'type': getattr(IContentType(content, None), 'name', 'content'),
+                    'modified': getattr(IDCTimes(content, None),'modified', datetime.datetime.now()).isoformat()[:19].replace('T',' '),
+                    'url': '@@content.byid/%s'%id
+                    }
+            data.append((content.title, content.__name__, info))
+
+        data.sort()
+        return encoder.encode([info for t,n,info in data])

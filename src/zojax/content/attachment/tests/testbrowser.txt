@@ -94,10 +94,9 @@ Add Link
 
 
 Edit link
-
-  >>> actor.getLink(url='content.attachments/zojax/').click()
-  >>> actor.getLink('Content').click()
-  >>> actor.getControl('Title').value = u'zojax HomePage'
+  >>> actor.getLink(url='++extensions++/content.attachments/zojax/context.html').click()
+  >>> actor.getLink('Content', url='context.html/content').click()
+  >>> actor.getControl('Title', index=0).value = u'zojax HomePage'
   >>> actor.getControl(name="content.edit.buttons.save").click()
   >>> actor.getLink('View').click()
   >>> print actor.contents
@@ -121,7 +120,7 @@ File
   >>> import os.path
   >>> filePath = os.path.join(os.path.split(__file__)[0], 'image.jpg')
 
-  >>> actor.getControl('Title').value = 'Test file'
+  >>> actor.getControl('Title', index=0).value = 'Test file'
   >>> fileControl = actor.getControl(name='content.add.widgets.data').mech_control
   >>> fileControl.add_file(open(filePath), filename='file')
   >>> actor.getControl(name='content.add.buttons.add').click()
@@ -136,8 +135,8 @@ File
   </html>
 
   >>> actor.getLink('file').click()
-  >>> actor.getLink('Content').click()
-  >>> actor.getControl('Title').value = u'Test attachment'
+  >>> actor.getLink('Content', url='context.html/content').click()
+  >>> actor.getControl('Title', index=0).value = u'Test attachment'
   >>> actor.getControl(name="content.edit.buttons.save").click()
   >>> actor.getLink('View').click()
   >>> print actor.contents
@@ -178,7 +177,7 @@ We upload text attachment
   >>> import os.path
   >>> filePath = os.path.join(os.path.split(__file__)[0], 'text.txt')
 
-  >>> actor.getControl('Title').value = 'Test text file'
+  >>> actor.getControl('Title', index=0).value = 'Test text file'
   >>> fileControl = actor.getControl(name='content.add.widgets.data').mech_control
   >>> fileControl.add_file(open(filePath), filename='text.txt')
   >>> actor.getControl(name='content.add.buttons.add').click()
@@ -200,7 +199,7 @@ Image
   >>> actor.getLink('Image').click()
 
   >>> filePath = os.path.join(os.path.split(__file__)[0], 'image.jpg')
-  >>> actor.getControl('Title').value = 'Test file'
+  >>> actor.getControl('Title', index=0).value = 'Test file'
   >>> fileControl = actor.getControl('Attachment').mech_control
   >>> fileControl.add_file(open(filePath), filename='image.jpg')
   >>> actor.getControl(name='add_input_name').value = 'image'
@@ -217,8 +216,8 @@ Image
   </html>
 
   >>> actor.getLink('image').click()
-  >>> actor.getLink('Content').click()
-  >>> actor.getControl('Title').value = u'Test image'
+  >>> actor.getLink('Content', url='context.html/content').click()
+  >>> actor.getControl('Title', index=0).value = u'Test image'
   >>> actor.getControl(name="content.edit.buttons.save").click()
   >>> actor.open('http://localhost/content/++extensions++/content.attachments/image/context.html')
   >>> print actor.contents
@@ -277,16 +276,15 @@ View
   >>> actor.contents[:10]
   '\xff\xd8\xff\xe0\x00\x10JFIF'
 
-Remove
+Remove and see it's regenerated
 
   >>> actor.open('http://localhost/content/++extensions++/content.attachments/image/context.html')
   >>> actor.getLink('Previews').click()
   >>> actor.getControl(name='preview:list').value = ['120x120']
   >>> actor.getControl(name='form.remove').click()
   >>> actor.open('http://localhost/content/++extensions++/content.attachments/image/preview/120x120/')
-  Traceback (most recent call last):
-  ...
-  NotFound: ...
+  >>> actor.contents[:10]
+  '\xff\xd8\xff\xe0\x00\x10JFIF'
 
   >>> img = extension['image']
   >>> preview = img.preview.generatePreview(100, 80)
@@ -305,7 +303,7 @@ Media
   >>> actor.getLink('Attachments').click()
   >>> actor.getLink('Media').click()
 
-  >>> actor.getControl('Title').value = 'Test media'
+  >>> actor.getControl('Title', index=0).value = 'Test media'
   >>> fileControl = actor.getControl('Media data').mech_control
   >>> fileControl.add_file(open(filePath), filename='bell.ogg')
   >>> actor.getControl(name='content.add.widgets.autoplay:list').value = ['true']
@@ -325,8 +323,8 @@ Media
   </html>
 
   >>> actor.getLink('media').click()
-  >>> actor.getLink('Content').click()
-  >>> actor.getControl('Title').value = u'Test media'
+  >>> actor.getLink('Content', url='context.html/content').click()
+  >>> actor.getControl('Title', index=0).value = u'Test media'
   >>> actor.getControl('Type').value
   'ogg'
   >>> actor.getControl(name="content.edit.buttons.save").click()
@@ -395,9 +393,8 @@ Remove
   >>> actor.getControl(name='preview:list').value = ['120x120']
   >>> actor.getControl(name='form.remove').click()
   >>> actor.open('http://localhost/content/++extensions++/content.attachments/media/preview/120x120/')
-  Traceback (most recent call last):
-  ...
-  NotFound: ...
+  >>> actor.contents[:10]
+  '\xff\xd8\xff\xe0\x00\x10JFIF'
 
   >>> media = extension['media']
   >>> preview = media.preview.generatePreview(100, 80)

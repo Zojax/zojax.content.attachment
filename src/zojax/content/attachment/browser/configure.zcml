@@ -154,6 +154,23 @@
   <class class=".publisher.Attachments">
     <allow interface="zope.publisher.interfaces.IPublishTraverse" />
   </class>
+  
+  <adapter
+     name="content.browser"
+     factory=".publisher.ContentItems" />
+
+  <class class=".publisher.ContentItems">
+    <allow interface="zope.publisher.interfaces.IPublishTraverse" />
+  </class>
+  
+  <adapter
+     name="content.byid"
+     factory=".publisher.ContentById" />
+
+  <class class=".publisher.ContentById">
+    <allow interface="zope.publisher.interfaces.IPublishTraverse" />
+  </class>
+
 
   <adapter
      name="content.attachment"
@@ -188,5 +205,19 @@
      for=".jsapi.IImageManagerAPI"
      class=".jsapi.FileRemove"
      permission="zojax.ModifyContent" />
+
+  <!-- content manager js api -->
+  <browser:page
+     name="contentManagerAPI"
+     for="*"
+     class=".jsapi.ContentManagerAPI"
+     permission="zope.Public" />
+
+  <browser:page
+     name="listing"
+     for=".jsapi.IContentManagerAPI"
+     class=".jsapi.ContentItems"
+     permission="zope.View" />
+
 
 </configure>

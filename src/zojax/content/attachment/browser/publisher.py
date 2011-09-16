@@ -11,6 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from zojax.content.type.interfaces import IContentContainer
 """
 
 $Id$
@@ -134,4 +135,48 @@ class Attachments(object):
             if ext is not None:
                 return LocationProxy(ext, content, name)
 
+        raise NotFound(self.context, name, request)
+
+
+class ContentItems(object):
+    interface.implements(IPublishTraverse)
+    component.adapts(interface.Interface, interface.Interface)
+
+    __name__ = 'content.browser'
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+        self.__parent__ = context
+
+    def publishTraverse(self, request, name):
+        try:
+            content = getUtility(IIntIds).queryObject(int(name))
+        except:
+            raise NotFound(self.context, name, request)
+        while not IContentContainer.providedBy(content) and content is not None:
+            content = content.__parent__
+
+        if content is not None:
+            return content
+            
+        raise NotFound(self.context, name, request)
+
+
+class ContentById(object):
+    interface.implements(IPublishTraverse)
+    component.adapts(interface.Interface, interface.Interface)
+
+    __name__ = 'content.byid'
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+        self.__parent__ = context
+
+    def publishTraverse(self, request, name):
+        try:
+            raise Redirect(absoluteURL(getUtility(IIntIds).queryObject(int(name), request)))
+        except:
+            pass
         raise NotFound(self.context, name, request)
