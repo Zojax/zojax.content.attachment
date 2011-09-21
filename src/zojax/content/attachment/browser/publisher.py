@@ -12,6 +12,7 @@
 #
 ##############################################################################
 from zojax.content.type.interfaces import IContentContainer
+from zope.app.container.interfaces import IContainer
 """
 
 $Id$
@@ -154,7 +155,7 @@ class ContentItems(object):
             content = getUtility(IIntIds).queryObject(int(name))
         except:
             raise NotFound(self.context, name, request)
-        while not IContentContainer.providedBy(content) and content is not None:
+        while not IContainer.providedBy(content) and content is not None:
             content = content.__parent__
 
         if content is not None:
