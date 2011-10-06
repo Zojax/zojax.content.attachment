@@ -30,6 +30,10 @@
        permission="zojax.AddContentAttachment"
        attributes="__setitem__" />
   </zojax:extension>
+  
+  <class class=".OOBTreeItems">
+   <allow attributes="__getslice__ __len__ __getitem__" /> 
+  </class>
 
   <!-- attachments container -->
   <zojax:content

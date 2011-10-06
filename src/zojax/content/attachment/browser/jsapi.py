@@ -54,8 +54,8 @@ encoder = JSONEncoder()
 def jsonable(func):
 
     def cal(self):
-        self.request.response.setHeader('Content-Type', 'text/html')
-        return unicode(func(self))
+        self.request.response.setHeader('Content-Type', ' application/json')
+        return unicode(func(self)).encode('utf-8')
     return cal
 
 
@@ -120,6 +120,8 @@ class ContentManagerAPI(BrowserView):
 
 
 class Images(object):
+    
+    iface = IImage
 
     @jsonable
     def __call__(self):
@@ -127,6 +129,15 @@ class Images(object):
         request = self.request
         container = self.context.context
         siteUrl = absoluteURL(getSite(), request)
+
+        try:
+            start = int(self.request.form.get('start', '0'))
+        except (TypeError, ValueError), e:
+            start = 0
+        try:
+            limit = int(self.request.form.get('limit', '0'))
+        except (TypeError, ValueError), e:
+            limit = 0
 
         try:
             width = int(request.form.get('pw', 150))
@@ -137,10 +148,13 @@ class Images(object):
             height = int(request.form.get('ph', 150))
         except:
             height = 150
-
+        
+        sort = self.request.form.get('sort', 'modified')
+        sort_direction = self.request.form.get('dir', 'DESC')
+        
         data = []
         for name, image in container.items():
-            if IImage.providedBy(image) and image.data is not None:
+            if self.iface.providedBy(image) and image.data is not None:
                 id = ids.queryId(removeAllProxies(image))
                 removeAllProxies(image.preview).generatePreview(width, height)
                 info = {'id': id,
@@ -153,10 +167,10 @@ class Images(object):
                         'url': '@@content.attachment/%s'%id,
                         'preview': '%s/content.attachment/%s/preview/%sx%s/'%(siteUrl, id, width, height),
                         }
-                data.append((image.title, image.__name__, info))
+                data.append(info)
 
-        data.sort()
-        return encoder.encode({'images': [info for t,n,info in data]})
+        data.sort(key=lambda x: x[sort], reverse=sort_direction == 'DESC')
+        return encoder.encode({'images': data[start:limit and start+limit or None], 'total': len(data)})
 
 
 class FileUpload(object):
@@ -165,17 +179,17 @@ class FileUpload(object):
     def __call__(self):
         request = self.request
         container = self.context.context
-        image = request.form.get('image', '')
+        image = request.form.get('file', '')
 
         if not image:
-            return encoder.encode({'success': 'false', 'message': ''})
+            return encoder.encode({'success': False, 'message': ''})
         name = os.path.split(image.filename)[-1]
 
         content = container.get(name)
         image = FileData(image)
         if IImage.providedBy(content):
             content.data = image
-            return encoder.encode({'success': 'true', 'message': '', 'file': name})
+            return encoder.encode({'success': True, 'message': '', 'file': name})
         elif name in container:
             del container[name]
 
@@ -184,7 +198,7 @@ class FileUpload(object):
         container[name] = content
         content.data = image
         return encoder.encode(
-            {'success': 'true', 'message': '', 'file': name})
+            {'success': True, 'message': '', 'file': name})
 
 
 class FileRemove(object):
@@ -202,7 +216,7 @@ class FileRemove(object):
             if name in container:
                 del container[name]
 
-        return encoder.encode({'success': 'true', 'message': ''})
+        return encoder.encode({'success': True, 'message': ''})
 
 
 class Medias(object):
@@ -213,12 +227,20 @@ class Medias(object):
         request = self.request
         container = self.context.context
         siteUrl = absoluteURL(getSite(), request)
-
+        try:
+            start = int(self.request.form.get('start', '0'))
+        except (TypeError, ValueError), e:
+            start = 0
+        try:
+            limit = int(self.request.form.get('limit', '0'))
+        except (TypeError, ValueError), e:
+            limit = 0
         try:
             width = int(request.form.get('pw', 150))
         except:
             width = 150
-
+        sort = self.request.form.get('sort', 'modified')
+        sort_direction = self.request.form.get('dir', 'DESC')
         try:
             height = int(request.form.get('ph', 150))
         except:
@@ -242,10 +264,10 @@ class Medias(object):
                         'preview': '%s/content.attachment/%s/preview/%sx%s/'%(
                            siteUrl, id, width, height),
                         }
-                data.append((media.title, media.__name__, info))
+                data.append(info)
 
-        data.sort()
-        return encoder.encode({'medias': [info for t,n,info in data]})
+        data.sort(key=lambda x: x[sort], reverse=sort_direction == 'DESC')
+        return encoder.encode({'medias': data[start:limit and start+limit or None], 'total': len(data)})
 
 
 class MediaFileUpload(object):
@@ -257,7 +279,7 @@ class MediaFileUpload(object):
         media = request.form.get('image', '')
         description = request.form.get('description', '')
         if not media:
-            return encoder.encode({'success': 'false', 'message': ''})
+            return encoder.encode({'success': False, 'message': ''})
 
         name = os.path.split(media.filename)[-1]
 
@@ -282,7 +304,7 @@ class MediaFileUpload(object):
             field.set(content, title)
             field = IMedia['description'].bind(content)
             field.set(content, description)
-            return encoder.encode({'success': 'true', 'message': '', 'file': name})
+            return encoder.encode({'success': True, 'message': '', 'file': name})
         elif name in container:
             del container[name]
         content = Media()
@@ -299,7 +321,7 @@ class MediaFileUpload(object):
         field = IMedia['description'].bind(content)
         field.set(content, description)
         return encoder.encode(
-            {'success': 'true', 'message': '', 'file': name})
+            {'success': True, 'message': '', 'file': name})
 
 
 class MediaFileRemove(object):
@@ -317,7 +339,7 @@ class MediaFileRemove(object):
             if name in container:
                 del container[name]
 
-        return encoder.encode({'success': 'true', 'message': ''})
+        return encoder.encode({'success': True, 'message': ''})
 
 
 class ContentItems(object):
