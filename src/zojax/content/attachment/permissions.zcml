@@ -2,7 +2,7 @@
    xmlns="http://namespaces.zope.org/zope"
    xmlns:i18n="http://namespaces.zope.org/i18n"
    xmlns:zojax="http://namespaces.zope.org/zojax"
-   i18n_domain="zojax.content.featured">
+   i18n_domain="zojax.content.attachment">
 
   <!-- permissions -->
   <zojax:permission
