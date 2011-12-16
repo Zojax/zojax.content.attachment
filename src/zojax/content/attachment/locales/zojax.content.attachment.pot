@@ -1,0 +1,181 @@
+##############################################################################
+#
+# Copyright (c) 2003-2004 Zope Corporation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+msgid ""
+msgstr ""
+"Project-Id-Version: Development/Unknown\n"
+"POT-Creation-Date: Thu Dec  8 22:33:29 2011\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Zope 3 Developers <zope3-dev@zope.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: zope/app/locales/extract.py\n"
+
+#: src/zojax/content/attachment/browser/attach.pt:3
+msgid "Attachment link"
+msgstr ""
+
+#: src/zojax/content/attachment/browser/editwizard.py:40
+#: src/zojax/content/attachment/configure.zcml:14
+msgid "Attachments"
+msgstr ""
+
+#: src/zojax/content/attachment/browser/link.pt:3
+msgid "The link address is:"
+msgstr ""
+
+#: src/zojax/content/attachment/browser/preview.pt:2
+msgid "Previews"
+msgstr ""
+
+#: src/zojax/content/attachment/browser/preview.pt:21
+msgid "Remove"
+msgstr ""
+
+#: src/zojax/content/attachment/browser/preview.pt:7
+msgid "There are no previews."
+msgstr ""
+
+#: src/zojax/content/attachment/browser/preview.py:30
+msgid "Width"
+msgstr ""
+
+#: src/zojax/content/attachment/browser/preview.py:35
+msgid "Height"
+msgstr ""
+
+#: src/zojax/content/attachment/browser/preview.py:45
+msgid "Preview"
+msgstr ""
+
+#: src/zojax/content/attachment/browser/preview.py:52
+msgid "Generate"
+msgstr ""
+
+#: src/zojax/content/attachment/browser/preview.py:69
+msgid "Previews have been removed."
+msgstr ""
+
+#: src/zojax/content/attachment/browser/preview.py:79
+msgid "Preview has been generated."
+msgstr ""
+
+#: src/zojax/content/attachment/configure.zcml:118
+msgid "Image attachment with previews."
+msgstr ""
+
+#: src/zojax/content/attachment/configure.zcml:118
+msgid "Image"
+msgstr ""
+
+#: src/zojax/content/attachment/configure.zcml:14
+msgid "Content attachments extension."
+msgstr ""
+
+#: src/zojax/content/attachment/configure.zcml:142
+msgid "Media"
+msgstr ""
+
+#: src/zojax/content/attachment/configure.zcml:142
+msgid "Media attachment"
+msgstr ""
+
+#: src/zojax/content/attachment/configure.zcml:39
+msgid "Attachments Container"
+msgstr ""
+
+#: src/zojax/content/attachment/configure.zcml:7
+msgid "Add content attachment"
+msgstr ""
+
+#: src/zojax/content/attachment/configure.zcml:72
+msgid "File attachment."
+msgstr ""
+
+#: src/zojax/content/attachment/configure.zcml:72
+msgid "File"
+msgstr ""
+
+#: src/zojax/content/attachment/configure.zcml:96
+msgid "Link"
+msgstr ""
+
+#: src/zojax/content/attachment/configure.zcml:96
+msgid "Link attachment."
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:116
+msgid "Link title."
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:122
+msgid "Link description."
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:127
+msgid "URL"
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:128
+msgid "Link URL."
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:34
+#: src/zojax/content/attachment/interfaces.py:115
+msgid "Title"
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:35
+msgid "Attachment title."
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:41
+#: src/zojax/content/attachment/interfaces.py:121
+msgid "Description"
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:42
+msgid "Attachment description."
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:52
+#: src/zojax/content/attachment/interfaces.py:70
+msgid "Attachment"
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:60
+msgid "Attachment type"
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:82
+msgid "Media data"
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:86
+msgid "Type"
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:87
+msgid "Attachment media type (extension)."
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:93
+msgid "Autoplay"
+msgstr ""
+
+#: src/zojax/content/attachment/interfaces.py:94
+msgid "Attachment media autoplay."
+msgstr ""
+
