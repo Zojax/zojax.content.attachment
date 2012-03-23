@@ -41,6 +41,7 @@ from zojax.content.attachment.interfaces import IImage, IMedia
 from zope.app.component.hooks import getSite
 
 from zojax.filefield.data import getImageSize
+from zojax.filefield.interfaces import NotAllowedFileType
 
 
 class Encoder(JSONEncoder):
@@ -182,13 +183,18 @@ class FileUpload(object):
         image = request.form.get('file', '')
 
         if not image:
-            return encoder.encode({'success': False, 'message': ''})
+            return encoder.encode({'success': False, 'message': '', 'error': 'No image provided'})
         name = os.path.split(image.filename)[-1]
 
         content = container.get(name)
         image = FileData(image)
+
         if IImage.providedBy(content):
-            content.data = image
+            try:
+                content.data = image
+            except NotAllowedFileType:
+                transaction.abort()
+                return encoder.encode({'success': False, 'message': '', 'error': 'File is not image'})
             return encoder.encode({'success': True, 'message': '', 'file': name})
         elif name in container:
             del container[name]
@@ -196,7 +202,11 @@ class FileUpload(object):
         content = Image()
         event.notify(ObjectCreatedEvent(content))
         container[name] = content
-        content.data = image
+        try:
+            content.data = image
+        except NotAllowedFileType:
+            transaction.abort()
+            return encoder.encode({'success': False, 'message': '', 'error': 'File is not image'})
         return encoder.encode(
             {'success': True, 'message': '', 'file': name})
 
@@ -279,7 +289,7 @@ class MediaFileUpload(object):
         media = request.form.get('image', '')
         description = request.form.get('description', '')
         if not media:
-            return encoder.encode({'success': False, 'message': ''})
+            return encoder.encode({'success': False, 'message': '',  'error': 'No file provided'})
 
         name = os.path.split(media.filename)[-1]
 
