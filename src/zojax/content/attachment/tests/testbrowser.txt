@@ -496,15 +496,15 @@ Image manage json api
 
   >>> actor.open(url + '/imageManagerAPI/listing')
   >>> print actor.contents
-  {"images": [{"name": "image", "title": "Test image", "url": "@@content.attachment/...", "height": 450, "width": 450, "preview": "http://localhost/content.attachment/.../preview/150x150/", "id": ..., "size": 16919}]}
+  {"images": [{"name": "image", "title": "Test image", "url": "@@content.attachment/...", "modified": "...", "height": 450, "width": 450, "preview": "http://localhost/content.attachment/.../preview/150x150/", "id": ..., "size": 16919}], "total": 1}
 
   >>> actor.open(url + '/imageManagerAPI/listing?pw=n&ph=n')
   >>> print actor.contents
-  {"images": [{"name": "image", "title": "Test image", "url": "@@content.attachment/...", "height": 450, "width": 450, "preview": "http://localhost/content.attachment/.../preview/150x150/", "id": ..., "size": 16919}]}
+  {"images": [{"name": "image", "title": "Test image", "url": "@@content.attachment/...", "modified": "...", "height": 450, "width": 450, "preview": "http://localhost/content.attachment/.../preview/150x150/", "id": ..., "size": 16919}], "total": 1}
 
   >>> actor.open(url + '/imageManagerAPI/listing?pw=80&ph=80')
   >>> print actor.contents
-  {"images": [{"name": "image", "title": "Test image", "url": "@@content.attachment/...", "height": 450, "width": 450, "preview": "http://localhost/content.attachment/.../preview/80x80/", "id": ..., "size": 16919}]}
+  {"images": [{"name": "image", "title": "Test image", "url": "@@content.attachment/...", "modified": "...", "height": 450, "width": 450, "preview": "http://localhost/content.attachment/.../preview/80x80/", "id": ..., "size": 16919}], "total": 1}
 
 Media manage json api
 ---------------------
@@ -513,15 +513,15 @@ Media manage json api
 
   >>> actor.open(url + '/mediaManagerAPI/listing')
   >>> print actor.contents
-  {"medias": [{"preview": "http://localhost/content.attachment/.../preview/150x150/", "description": "", "title": "Test media", "url": "@@content.attachment/...", "name": "media", "size": 16919, "type": "ogg", "id": ..., "autoplay": true}]}
+  {"medias": [{"preview": "http://localhost/content.attachment/.../preview/150x150/", "description": "", "title": "Test media", "url": "@@content.attachment/...", "modified": "...", "name": "media", "size": 16919, "type": "ogg", "id": ..., "autoplay": true}], "total": 1}
 
   >>> actor.open(url + '/mediaManagerAPI/listing?pw=n&ph=n')
   >>> print actor.contents
-  {"medias": [{"preview": "http://localhost/content.attachment/.../preview/150x150/", "description": "", "title": "Test media", "url": "@@content.attachment/...", "name": "media", "size": 16919, "type": "ogg", "id": ..., "autoplay": true}]}
+  {"medias": [{"preview": "http://localhost/content.attachment/.../preview/150x150/", "description": "", "title": "Test media", "url": "@@content.attachment/...", "modified": "...", "name": "media", "size": 16919, "type": "ogg", "id": ..., "autoplay": true}], "total": 1}
 
   >>> actor.open(url + '/mediaManagerAPI/listing?pw=80&ph=60')
   >>> print actor.contents
-  {"medias": [{"preview": "http://localhost/content.attachment/.../preview/80x60/", "description": "", "title": "Test media", "url": "@@content.attachment/...", "name": "media", "size": 16919, "type": "ogg", "id": ..., "autoplay": true}]}
+  {"medias": [{"preview": "http://localhost/content.attachment/.../preview/80x60/", "description": "", "title": "Test media", "url": "@@content.attachment/...", "modified": "...", "name": "media", "size": 16919, "type": "ogg", "id": ..., "autoplay": true}], "total": 1}
 
 
 Vocabularies
