@@ -244,7 +244,7 @@ class Medias(object):
         except:
             width = 150
         sort = self.request.form.get('sort', 'modified')
-        sort_direction = self.request.form.get('dir', 'DESC')
+        sort_direction = self.request.form.get('dir', 'DESC').upper()
         try:
             height = int(request.form.get('ph', 150))
         except:
