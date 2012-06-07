@@ -33,6 +33,7 @@ from zope.publisher.interfaces import NotFound
 from zope.traversing.browser import absoluteURL
 from zope.lifecycleevent import ObjectCreatedEvent
 from zope.app.component.hooks import getSite
+from zope.app.container.interfaces import INameChooser
 from zope.app.intid.interfaces import IIntIds
 
 from zojax.content.attachment.image import Image
@@ -151,7 +152,7 @@ class Images(object):
             height = 150
         
         sort = self.request.form.get('sort', 'modified')
-        sort_direction = self.request.form.get('dir', 'DESC')
+        sort_direction = self.request.form.get('dir', 'DESC').upper()
         
         data = []
         for name, image in container.items():
@@ -186,20 +187,13 @@ class FileUpload(object):
             return encoder.encode({'success': False, 'message': '', 'error': 'No image provided'})
         name = os.path.split(image.filename)[-1]
 
-        content = container.get(name)
         image = FileData(image)
 
-        if IImage.providedBy(content):
-            try:
-                content.data = image
-            except NotAllowedFileType:
-                transaction.abort()
-                return encoder.encode({'success': False, 'message': '', 'error': 'File is not image'})
-            return encoder.encode({'success': True, 'message': '', 'file': name})
-        elif name in container:
-            del container[name]
+        chooser = INameChooser(container)
 
         content = Image()
+
+        name = chooser.chooseName(name, content)
         event.notify(ObjectCreatedEvent(content))
         container[name] = content
         try:
@@ -250,7 +244,7 @@ class Medias(object):
         except:
             width = 150
         sort = self.request.form.get('sort', 'modified')
-        sort_direction = self.request.form.get('dir', 'DESC')
+        sort_direction = self.request.form.get('dir', 'DESC').upper()
         try:
             height = int(request.form.get('ph', 150))
         except:

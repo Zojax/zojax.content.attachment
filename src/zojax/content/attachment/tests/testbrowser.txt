@@ -619,6 +619,18 @@ Post with correct data
     >>> print actor.contents
     {"message": "", "file": "zope.gif", "success": true}
 
+Post with duplicated filename data
+    >>> form = HTMLForm(action = url +'/imageManagerAPI/upload/', method="POST", enctype="multipart/form-data")
+    >>> form.new_control('file','file', {'name' : 'file', 'label': 'file'})
+    >>> form.new_control('submit','upload', {'name' : 'Upload', 'label': 'Upload'})
+    >>> browser_form = Form(actor, form)
+    >>> file_ctrl = browser_form.getControl(name = 'file')
+    >>> file_ctrl.add_file(open(img_file_path), content_type ='image', filename='zope.gif')
+    >>> browser_form = Form(actor, form)
+    >>> browser_form.submit()
+    >>> print actor.contents
+    {"message": "", "file": "zope-2.gif", "success": true}
+
 
   >>> setSite(None)
 
