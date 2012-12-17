@@ -58,7 +58,10 @@ class PreviewPublisherPlugin(object):
             dimensions = name.split('x')
             image = self.context
             preview = image.generatePreview(int(dimensions[0]), int(dimensions[1]))
-            return LocationProxy(self.context[name], preview, name)
+            try:
+                return LocationProxy(self.context[name], preview, name)
+            except KeyError:
+                return LocationProxy(self.context, preview, name)
             #raise NotFound(self.context, name, request)
 
 

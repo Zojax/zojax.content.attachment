@@ -297,6 +297,7 @@ class MediaFileUpload(object):
             mediaType = os.path.splitext(name)[1][1:]
 
         content = container.get(name)
+        self.request.response.setHeader('content-type', 'text/html')
         if IMedia.providedBy(content):
             field = IMedia['data'].bind(content)
             field.set(content, media)

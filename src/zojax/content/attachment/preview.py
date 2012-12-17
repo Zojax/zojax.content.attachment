@@ -22,7 +22,7 @@ from zope.app.container.btree import BTreeContainer
 
 from zojax.filefield.data import File
 from zojax.converter.api import convert
-from zojax.converter.interfaces import ConverterException
+from zojax.converter.interfaces import ConverterException, ConverterNotFound
 
 import browser
 
@@ -83,7 +83,7 @@ class MediaPreviewFolder(BTreeContainer):
 
         media = self.__parent__
 
-        if not media:
+        if media:
             return
 
         try:
@@ -91,7 +91,7 @@ class MediaPreviewFolder(BTreeContainer):
                         browser.__path__[0], 'media_icon.gif')).read(),
                            'image/jpeg', sourceMimetype = 'image/gif',
                            width=width, height=height, quality=quality)
-        except ConverterException:
+        except (ConverterException,ConverterNotFound), e:
             logger.warning('Conversion Error:', exc_info=True)
             return
 
