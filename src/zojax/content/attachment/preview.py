@@ -83,7 +83,7 @@ class MediaPreviewFolder(BTreeContainer):
 
         media = self.__parent__
 
-        if media:
+        if not media:
             return
 
         try:
